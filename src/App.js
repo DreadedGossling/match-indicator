@@ -1,13 +1,37 @@
+import { useState } from 'react';
 import './App.css';
 import ScoreIndicator from 'react-score-indicator';
 import Paper from '@mui/material/Paper';
 
-let lineStyle = {
-  font: 18
-  // transform: rotate(180deg)
-}
 function App() {
-  const score = 27.5;
+  const [score, setScore] = useState(1)
+  const [text, setText] = useState("Not A Good Match")
+
+  const handleChange = (e) => {
+    const number = e.target.value
+    if (number < 1) {
+      setScore(1)
+    }
+    else if (number > 36) {
+      setScore(36)
+    }
+    else {
+      setScore(number)
+    }
+
+    if (number <= 9) {
+      setText("Not A Good Match")
+    }
+    else if (number > 9 && number <= 18) {
+      setText("May Be A Good Match")
+    }
+    else if (number > 18 && number <= 27) {
+      setText("Good Match")
+    }
+    else if (number > 27) {
+      setText("Perfect Match")
+    }
+  }
 
   return (
     <div className='app'>
@@ -35,13 +59,27 @@ function App() {
             textStyle={{ color: "black" }}
           />
 
+          <div className='score'>
+            <label htmlFor="score">Try Changing The Number Here : </label>
+            <input type="number"
+              value={score}
+              onChange={handleChange}
+              min={1}
+              max={36}
+              className='input'
+            />
+          </div>
+
           <hr className='line2' />
           <span className='details'>Details</span>
+
+          <p className='detailText'>{text}</p>
+
         </div>
 
       </Paper>
 
-      <div className='indicator'>
+      <div className='indicator' style={{ transform: `rotate(${180 + score * 5}deg)` }}>
         <div className='circle'></div>
         <div className='line'></div>
       </div>
